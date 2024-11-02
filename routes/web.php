@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\reportcontroller;
 use App\Http\Controllers\rolecontroller;
+use App\Http\Controllers\TimeOffController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsenceController;
 
@@ -27,3 +28,4 @@ Route::get('/admin', function () {
 Route::resource('absences', AbsenceController::class);
 Route::resource('history', reportcontroller::class);
 Route::resource('role', rolecontroller::class);
+Route::get('/timeoff', [TimeOffController::class, 'index'])->name('timeoff.index');
