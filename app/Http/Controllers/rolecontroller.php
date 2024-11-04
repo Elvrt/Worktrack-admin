@@ -2,64 +2,120 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\rolemodel;
+use App\Models\RoleModel;
 use Illuminate\Http\Request;
 
-class rolecontroller extends Controller
+class RoleController extends Controller
 {
     public function index()
     {
-        $role = rolemodel::all();
-        return view('role.index', compact('role'));
+        $breadcrumb = (object) [
+            'title' => 'Role List',
+            'list' => ['Home', 'Role', 'List']
+        ];
+
+        $activeMenu = 'role';
+
+        $roles = RoleModel::all();
+
+        return view('role.index', compact('breadcrumb', 'roles', 'activeMenu'));
     }
 
-    // Show the form for creating a new role
     public function create()
     {
-        return view('role.create');
+        $breadcrumb = (object) [
+            'title' => 'Role Create',
+            'list' => ['Home', 'Role', 'Create']
+        ];
+
+        $activeMenu = 'role';
+
+        return view('role.create', compact('breadcrumb', 'activeMenu'));
     }
 
-    // Store a newly created role in storage
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'position' => 'required|String',
+        $request->validate(
+            [
+                'position' => 'required|string|unique:role,position|max:30',
+            ],
+            [
+                'position.required' => 'The position field is required.',
+                'position.string' => 'The position must be a valid string.',
+                'position.unique' => 'This position already exists. Please choose a different one.',
+                'position.max' => 'The position must not exceed 30 characters.',
+            ]
+        );
+
+        RoleModel::create([
+            'position' => $request->position,
         ]);
 
-        rolemodel::create($validated);
-
-        return redirect()->route('role.index')->with('success', 'Role created successfully.');
+        return redirect('role')->with('success', 'Role data successfully saved');
     }
 
-    // Display the specified role
-    public function show(rolemodel $role)
+    public function show(string $id)
     {
-        return view('role.show', compact('role'));
+        $role = RoleModel::find($id);
+
+        $breadcrumb = (object) [
+            'title' => 'Role Detail',
+            'list' => ['Home', 'Role', 'Detail']
+        ];
+
+        $activeMenu = 'role';
+
+        return view('role.show', compact('breadcrumb', 'role', 'activeMenu'));
     }
 
-    // Show the form for editing the specified role
-    public function edit(rolemodel $role)
+    public function edit(string $id)
     {
-        return view('role.edit', compact('role'));
+        $role = RoleModel::find($id);
+
+        $breadcrumb = (object) [
+            'title' => 'Role Edit',
+            'list' => ['Home', 'Role', 'Edit']
+        ];
+
+        $activeMenu = 'role';
+
+        return view('role.edit', compact('breadcrumb', 'role', 'activeMenu'));
     }
 
-    // Update the specified role in storage
-    public function update(Request $request, rolemodel $role)
+    public function update(Request $request, string $id)
     {
-        $validated = $request->validate([
-            'position' => 'required|String',
+        $request->validate(
+            [
+                'position' => 'required|string|unique:role,position,'.$id.',role_id|max:30',
+            ],
+            [
+                'position.required' => 'The position field is required.',
+                'position.string' => 'The position must be a valid string.',
+                'position.unique' => 'This position already exists. Please choose a different one.',
+                'position.max' => 'The position must not exceed 30 characters.',
+            ]
+        );
+
+        RoleModel::find($id)->update([
+            'position' => $request->position,
         ]);
 
-        $role->update($validated);
-
-        return redirect()->route('role.index')->with('success', 'Role updated successfully.');
+        return redirect('role')->with('success', 'Role data successfully changed');
     }
 
-    // Remove the specified role from storage
-    public function destroy(rolemodel $role)
+    public function destroy(string $id)
     {
-        $role->delete();
+        $check = RoleModel::find($id);
+        if (!$check) {
+            return redirect('role')->with('error', 'Role data not found');
+        }
 
-        return redirect()->route('role.index')->with('success', 'Role deleted successfully.');
+        try {
+            RoleModel::destroy($id);
+
+            return redirect('role')->with('success', 'Role data successfully deleted');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('role')->with('error', 'Role data failed to be deleted because there are still other tables associated with this data');
+        }
     }
 }

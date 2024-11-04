@@ -17,29 +17,46 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
+    protected $table = 'user';
+    protected $primaryKey = 'user_id';
+    public $timestamps = false;
+
+    protected $fillable =
+    [
+        'role_id',
+        'employee_id',
+        'username',
         'password',
+        'created_at',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(RoleModel::class, 'role_id');
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(EmployeeModel::class, 'employee_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    // protected $hidden = [
+    //     'password',
+    //     'remember_token',
+    // ];
 
     /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    // protected $casts = [
+    //     'email_verified_at' => 'datetime',
+    //     'password' => 'hashed',
+    // ];
 }

@@ -10,9 +10,7 @@ class reportmodel extends Model
     use HasFactory;
 
     protected $table = 'report';
-
     protected $primaryKey = 'report_id';
-
     public $timestamps = false;
 
     protected $fillable = [
@@ -23,9 +21,8 @@ class reportmodel extends Model
         'comment'
     ];
 
-    // Define relationship with another table (for example, if absence_id is a foreign key to an 'Absence' model)
     public function absence()
     {
-        return $this->belongsTo(absence::class, 'absence_id');
+        return $this->belongsTo(AbsenceModel::class, 'absence_id');
     }
 }

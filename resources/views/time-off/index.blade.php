@@ -8,20 +8,6 @@
         @include('layouts.breadcrumb')
         <!-- /.Breadcrumb -->
 
-        <div class="sm:flex">
-            <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
-                <a href="{{ route('role.create') }}"
-                    class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-amber-600 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 sm:w-auto">
-                    <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    Add Role
-                </a>
-            </div>
-        </div>
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-center text-green-700 p-2 mt-3 rounded-lg relative"
                 id="success-alert">
@@ -44,7 +30,19 @@
                     <thead class="bg-gray-100">
                         <tr>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
-                                Position
+                                Nama
+                            </th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
+                                Start Date
+                            </th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
+                                End Date
+                            </th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
+                                Reason
+                            </th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
+                                Status
                             </th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
                                 Actions
@@ -52,25 +50,37 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse ($roles as $role)
+                        @forelse ($timeOffs as $timeOff)
                             <tr class="hover:bg-gray-100">
-                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
-                                    {{ $role->position }}
+                                <td
+                                    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                    {{ $timeOff->employee->name }}
+                                </td>
+                                <td
+                                    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                    {{ \Carbon\Carbon::parse($timeOff->start_date)->format('d M Y') }}
+                                </td>
+                                <td
+                                    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                    {{ \Carbon\Carbon::parse($timeOff->end_date)->format('d M Y') }}
+                                </td>
+                                <td
+                                    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                    {{ $timeOff->reason }}
+                                </td>
+                                <td
+                                    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                    @if ($timeOff->status === 'approved')
+                                        <span class="inline-block w-2 h-2 mr-2 bg-green-500 rounded-full"></span>
+                                    @elseif ($timeOff->status === 'rejected')
+                                        <span class="inline-block w-2 h-2 mr-2 bg-red-500 rounded-full"></span>
+                                    @else
+                                        <span class="inline-block w-2 h-2 mr-2 bg-gray-500 rounded-full"></span>
+                                    @endif
+                                    {{ $timeOff->status }}
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
-                                    <a href="{{ route('role.edit', $role->role_id) }}"
-                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-lime-600 hover:bg-lime-800 focus:ring-4 focus:ring-lime-300">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z">
-                                            </path>
-                                            <path fill-rule="evenodd"
-                                                d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </a>
-                                    <a href="{{ route('role.show', $role->role_id) }}"
+                                    <a href="{{ route('time-off.show', $timeOff->time_off_id) }}"
                                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                             class="bi bi-eye-fill" viewBox="0 0 16 16">
@@ -79,7 +89,7 @@
                                                 d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
                                         </svg>
                                     </a>
-                                    <button type="button" onclick="openModal({{ $role->role_id }})"
+                                    <button type="button" onclick="openModal({{ $timeOff->time_off_id }})"
                                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300">
                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -102,8 +112,7 @@
                                                 <h3 class="mt-5 mb-6 text-lg text-gray-500">Are you sure you want to
                                                     delete this ?</h3>
                                                 <div class="flex justify-center space-x-4">
-                                                    <form id="delete-form" action=""
-                                                        method="POST">
+                                                    <form id="delete-form" action="" method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
@@ -123,9 +132,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2"
+                                <td colspan="6"
                                     class="max-w-sm p-4 overflow-hidden text-center font-normal text-gray-500 truncate xl:max-w-xs">
-                                    No roles found</td>
+                                    No time off found</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -137,8 +146,8 @@
 
 @push('js')
     <script>
-        function openModal(roleId) {
-            document.getElementById('delete-form').action = "{{ route('role.destroy', '') }}/" + roleId;
+        function openModal(timeOffId) {
+            document.getElementById('delete-form').action = "{{ route('time-off.destroy', '') }}/" + timeOffId;
 
             document.getElementById('delete-modal').classList.remove('hidden');
         }

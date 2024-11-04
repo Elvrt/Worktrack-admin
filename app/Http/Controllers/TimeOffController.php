@@ -2,100 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TimeOffModel;
+use App\Models\EmployeeModel;
 use Illuminate\Http\Request;
-use App\Models\TimeOffData;
 
 class TimeOffController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $data = TimeOffData::all();
-        return response()->json($data);
+        $breadcrumb = (object) [
+            'title' => 'Time Off List',
+            'list' => ['Home', 'Time Off', 'List']
+        ];
+
+        $activeMenu = 'time-off';
+
+        $timeOffs = TimeOffModel::whereIn('status', ['approved', 'rejected'])->get();
+
+        return view('time-off.index', compact('breadcrumb', 'timeOffs', 'activeMenu'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        // Validation rules
-        $request->validate([
-            'employee_id' => 'required|exists:employees,id', // Ensure employee_id exists in employees table
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'reason' => 'required|string',
-            'letter' => 'nullable|string', // Letter is optional
-        ]);
-
-        // Store new data
-        $save = new TimeOffData;
-        $save->employee_id = $request->employee_id;
-        $save->start_date = $request->start_date;
-        $save->end_date = $request->end_date;
-        $save->reason = $request->reason;
-        $save->letter = $request->letter;
-        $save->created_at = now();
-        $save->save();
-
-        return response()->json(['message' => 'Data saved successfully']);
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        $data = TimeOffData::find($id);
-        if ($data) {
-            return response()->json($data);
-        }
+        $timeOff = TimeOffModel::find($id);
 
-        return response()->json(['message' => 'Data not found'], 404);
+        $breadcrumb = (object) [
+            'title' => 'Time Off Detail',
+            'list' => ['Home', 'Time Off', 'Detail']
+        ];
+
+        $activeMenu = 'time-off';
+
+        $employees = EmployeeModel::all();
+
+        return view('time-off.show', compact('breadcrumb', 'timeOff', 'employees','activeMenu'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        // Validation rules
-        $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'reason' => 'required|string',
-            'letter' => 'nullable|string',
-        ]);
-
-        $data = TimeOffData::find($id);
-        if ($data) {
-            $data->employee_id = $request->employee_id;
-            $data->start_date = $request->start_date;
-            $data->end_date = $request->end_date;
-            $data->reason = $request->reason;
-            $data->letter = $request->letter;
-            $data->save();
-
-            return response()->json(['message' => 'Data updated successfully']);
-        }
-
-        return response()->json(['message' => 'Data not found'], 404);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $data = TimeOffData::find($id);
-        if ($data) {
-            $data->delete();
-            return response()->json(['message' => 'Data deleted successfully']);
+        $check = TimeOffModel::find($id);
+        if (!$check) {
+            return redirect('time-off')->with('error', 'Time Off data not found');
         }
 
-        return response()->json(['message' => 'Data not found'], 404);
+        try {
+            TimeOffModel::destroy($id);
+
+            return redirect('time-off')->with('success', 'Time Off data successfully deleted');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('time-off')->with('error', 'Time Off data failed to be deleted because there are still other tables associated with this data');
+        }
     }
 }

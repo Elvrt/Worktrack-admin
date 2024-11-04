@@ -8,9 +8,9 @@
         @include('layouts.breadcrumb')
         <!-- /.Breadcrumb -->
 
-        <div class="sm:flex">
+        <!-- <div class="sm:flex">
             <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
-                <a href="{{ route('role.create') }}"
+                <a href="{{ route('goal.create') }}"
                     class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-amber-600 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 sm:w-auto">
                     <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
@@ -18,10 +18,10 @@
                             d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    Add Role
+                    Add Goal
                 </a>
             </div>
-        </div>
+        </div> -->
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-center text-green-700 p-2 mt-3 rounded-lg relative"
                 id="success-alert">
@@ -44,7 +44,13 @@
                     <thead class="bg-gray-100">
                         <tr>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
-                                Position
+                                Goal Date
+                            </th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
+                                Project Title
+                            </th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
+                                Project Description
                             </th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase">
                                 Actions
@@ -52,13 +58,19 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse ($roles as $role)
+                        @forelse ($goals as $goal)
                             <tr class="hover:bg-gray-100">
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
-                                    {{ $role->position }}
+                                    {{ \Carbon\Carbon::parse($goal->goal_date)->format('d M Y') }}
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                    {{ $goal->project_title }}
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                    {{ $goal->project_description }}
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
-                                    <a href="{{ route('role.edit', $role->role_id) }}"
+                                    <a href="{{ route('goal.edit', $goal->goal_id) }}"
                                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-lime-600 hover:bg-lime-800 focus:ring-4 focus:ring-lime-300">
                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -70,7 +82,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </a>
-                                    <a href="{{ route('role.show', $role->role_id) }}"
+                                    <a href="{{ route('goal.show', $goal->goal_id) }}"
                                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                             class="bi bi-eye-fill" viewBox="0 0 16 16">
@@ -79,7 +91,7 @@
                                                 d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
                                         </svg>
                                     </a>
-                                    <button type="button" onclick="openModal({{ $role->role_id }})"
+                                    <button type="button" onclick="openModal({{ $goal->goal_id }})"
                                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300">
                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -123,9 +135,12 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2"
+                                <!-- <td colspan="4"
                                     class="max-w-sm p-4 overflow-hidden text-center font-normal text-gray-500 truncate xl:max-w-xs">
-                                    No roles found</td>
+                                    No goals found</td> -->
+                                    <td colspan="4"
+                                    class="max-w-sm p-4 overflow-hidden text-center font-normal text-gray-500 truncate xl:max-w-xs">
+                                    Goal Coming Soon</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -137,8 +152,8 @@
 
 @push('js')
     <script>
-        function openModal(roleId) {
-            document.getElementById('delete-form').action = "{{ route('role.destroy', '') }}/" + roleId;
+        function openModal(goalId) {
+            document.getElementById('delete-form').action = "{{ route('goal.destroy', '') }}/" + goalId;
 
             document.getElementById('delete-modal').classList.remove('hidden');
         }

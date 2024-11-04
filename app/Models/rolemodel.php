@@ -5,17 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class rolemodel extends Model
+class RoleModel extends Model
 {
     use HasFactory;
 
     protected $table = 'role';
-
     protected $primaryKey = 'role_id';
-
     public $timestamps = false;
 
-    protected $fillable = [
-        'position'
+    protected $fillable = 
+    [
+        'position',
+        'created_at',
     ];
+
+    public function user()
+    {
+        return $this->hasMany(User::class, 'user_id');
+    }
 }

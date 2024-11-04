@@ -5,21 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AbsenceModel extends Model
+class TimeOffModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'absence';
-    protected $primaryKey = 'absence_id';
+    protected $table = 'time_off';
+    protected $primaryKey = 'time_off_id';
     public $timestamps = false;
 
-    protected $fillable =
+    protected $fillable = 
     [
         'employee_id',
-        'absence_date',
-        'clock_in',
-        'clock_out',
-        'location',
+        'start_date',
+        'end_date',
+        'reason',
+        'letter',
         'status',
         'created_at',
     ];
@@ -28,9 +28,4 @@ class AbsenceModel extends Model
     {
         return $this->belongsTo(EmployeeModel::class, 'employee_id');
     }
-
-    public function report()
-    {
-        return $this->hasMany(ReportModel::class, 'report_id');
-    }
-}   
+}

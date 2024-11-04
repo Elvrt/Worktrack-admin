@@ -9,8 +9,9 @@ class EmployeeModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'Employee';
+    protected $table = 'employee';
     protected $primaryKey = 'employee_id';
+    public $timestamps = false;
 
     protected $fillable =
     [
@@ -24,7 +25,7 @@ class EmployeeModel extends Model
 
     public function user()
     {
-        return $this->belongsTo(UserModel::class, 'user_id');
+        return $this->hasOne(User::class, 'user_id');
     }
 
     public function face()
@@ -32,9 +33,9 @@ class EmployeeModel extends Model
         return $this->hasMany(FaceModel::class, 'face_id');
     }
 
-    public function assigment()
+    public function assignment()
     {
-        return $this->hasMany(AssigmentModel::class, 'assigment_id');
+        return $this->hasMany(AssignmentModel::class, 'assignment_id');
     }
 
     public function absence()
@@ -42,8 +43,8 @@ class EmployeeModel extends Model
         return $this->hasMany(AbsenceModel::class, 'absence_id');
     }
 
-    public function take_off()
+    public function time_off()
     {
-        return $this->hasMany(Model::class, 'take_off_id');
+        return $this->hasMany(TimeOffModel::class, 'time_off_id');
     }
 }
