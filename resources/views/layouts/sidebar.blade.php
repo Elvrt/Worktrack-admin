@@ -79,6 +79,10 @@
                     </li>
                     <li>
                         <a href="#"
+                            class="text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-yellow-100 active:bg-yellow-300 transition duration-75 pl-11">Absences</a>
+                    </li>
+                    <li>
+                        <a href="#"
                             class="text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-yellow-100 active:bg-yellow-300 transition duration-75 pl-11">Reports</a>
                     </li>
                 </ul>

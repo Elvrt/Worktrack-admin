@@ -20,16 +20,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // route goal
-Route::group(['prefix' => 'dashboard'], function () {
+Route::group(['prefix' => ''], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 });
 
-// route goal
+// route goal & assignment
 Route::group(['prefix' => 'goal'], function () {
     Route::get('/', [GoalController::class, 'index'])->name('goal.index');
     Route::get('/create', [GoalController::class, 'create'])->name('goal.create');

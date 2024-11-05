@@ -8,7 +8,7 @@
         @include('layouts.breadcrumb')
         <!-- /.Breadcrumb -->
 
-        <!-- <div class="sm:flex">
+        <div class="sm:flex">
             <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
                 <a href="{{ route('goal.create') }}"
                     class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-amber-600 hover:bg-amber-800 focus:ring-4 focus:ring-amber-300 sm:w-auto">
@@ -21,7 +21,7 @@
                     Add Goal
                 </a>
             </div>
-        </div> -->
+        </div>
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-center text-green-700 p-2 mt-3 rounded-lg relative"
                 id="success-alert">
@@ -60,13 +60,16 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse ($goals as $goal)
                             <tr class="hover:bg-gray-100">
-                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                <td
+                                    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
                                     {{ \Carbon\Carbon::parse($goal->goal_date)->format('d M Y') }}
                                 </td>
-                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                <td
+                                    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
                                     {{ $goal->project_title }}
                                 </td>
-                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
+                                <td
+                                    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap overflow-hidden truncate">
                                     {{ $goal->project_description }}
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
@@ -114,8 +117,7 @@
                                                 <h3 class="mt-5 mb-6 text-lg text-gray-500">Are you sure you want to
                                                     delete this ?</h3>
                                                 <div class="flex justify-center space-x-4">
-                                                    <form id="delete-form" action=""
-                                                        method="POST">
+                                                    <form id="delete-form" action="" method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
@@ -135,12 +137,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <!-- <td colspan="4"
+                                <td colspan="4"
                                     class="max-w-sm p-4 overflow-hidden text-center font-normal text-gray-500 truncate xl:max-w-xs">
-                                    No goals found</td> -->
-                                    <td colspan="4"
-                                    class="max-w-sm p-4 overflow-hidden text-center font-normal text-gray-500 truncate xl:max-w-xs">
-                                    Goal Coming Soon</td>
+                                    No goals found</td>
                             </tr>
                         @endforelse
                     </tbody>
