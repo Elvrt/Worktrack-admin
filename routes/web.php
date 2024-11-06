@@ -25,7 +25,7 @@ Route::get('/', function () {
 });
 
 // route goal
-Route::group(['prefix' => 'dashboard'], function () {
+Route::group(['prefix' => ''], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 });
 
