@@ -29,7 +29,8 @@
                                     @foreach($employees as $employee)
                                         <option value="{{$employee->employee_id}}"
                                             {{old('employee_id') == $employee->employee_id ? "selected" : ""}}>
-                                            {{$employee->name}}</option>
+                                            {{$employee->name}}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('employee_id')
@@ -40,8 +41,8 @@
                                 <label for="letter" class="block mb-2 text-sm font-medium text-gray-900">Letter</label>
                                 <input
                                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-                                    name="letter" id="letter" value="{{ old('letter') }}" type="file"
-                                    placeholder="Enter letter">
+                                    name="letter" id="letter" type="file" accept="image/*" onchange="previewImage(event)">
+                                <p class="mt-1 text-sm text-gray-500">JPG, PNG, or JPEG (MAX. 2MB).</p>
                                 @error('letter')
                                     <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                 @enderror
@@ -111,4 +112,45 @@
         </div>
     </div>
 </div>
+
+<!-- Modal for Letter Preview -->
+<div id="letterModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50">
+    <div class="flex items-center justify-center min-h-screen px-4 py-8">
+        <div class="relative w-full max-w-md p-4 bg-white rounded-lg shadow-lg">
+            <button type="button" onclick="closeModal()"
+                class="absolute top-3 right-3 text-gray-600 hover:text-gray-900">
+                &#10005;
+            </button>
+            <h2 class="mb-4 text-lg font-medium text-gray-900">Letter Preview</h2>
+            <div class="overflow-y-auto max-h-96 rounded-lg">
+                <img id="letterPreview" src="#" alt="Letter Preview" class="w-full max-w-xs object-cover mx-auto">
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('js')
+    <script>
+        function previewImage(event) {
+            const image = document.getElementById('letterPreview');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    image.src = e.target.result;
+                    openModal();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function openModal() {
+            document.getElementById('letterModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('letterModal').classList.add('hidden');
+        }
+    </script>
+@endpush
 @endsection

@@ -90,16 +90,16 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Username</label>
                                 <input type="text" name="username" id="username"
-                                    value="{{ old('username', $employee->user->username) }}"
+                                    value="{{ $employee->user->username }}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                                     placeholder="Enter username" disabled>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="profile" class="block mb-2 text-sm font-medium text-gray-900">Profile</label>
-                                <input
-                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-                                    name="profile" id="profile" value="{{ $employee->user->profile }}" type="file"
-                                    placeholder="Enter profile" disabled>
+                                <div class="mt-3">
+                                    <img id="profile" src="{{ $employee->profile }}" alt="Profile Preview"
+                                        class="w-32 h-32 rounded-full object-cover">
+                                </div>
                             </div>
                         </div>
                     </div>
