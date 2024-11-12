@@ -37,16 +37,16 @@
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->employee_id }}"
                                             {{ $permission->employee->employee_id == $employee->employee_id ? "selected" : "" }}>
-                                            {{ $employee->name }}</option>
+                                            {{ $employee->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="letter" class="block mb-2 text-sm font-medium text-gray-900">Letter</label>
-                                <input
-                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-                                    name="letter" id="letter" value="{{ $permission->letter }}" type="file"
-                                    placeholder="Enter letter" disabled>
+                                <button type="button" onclick="openModal('{{ $permission->letter }}')" class="block w-full text-start text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2.5">
+                                    View Letter
+                                </button>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="start_date" class="block mb-2 text-sm font-medium text-gray-900">Start
@@ -101,4 +101,33 @@
         </div>
     </div>
 </div>
+
+<!-- Modal for Letter Preview -->
+<div id="letterModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50">
+    <div class="flex items-center justify-center min-h-screen px-4 py-8">
+        <div class="relative w-full max-w-md p-4 bg-white rounded-lg shadow-lg">
+            <button type="button" onclick="closeModal()" class="absolute top-3 right-3 text-gray-600 hover:text-gray-900">
+                &#10005;
+            </button>
+            <h2 class="mb-4 text-lg font-medium text-gray-900">Letter Preview</h2>
+            <div class="overflow-y-auto max-h-96 rounded-lg">
+                <img id="letterPreview" src="#" alt="Letter Preview" class="w-full max-w-xs object-cover mx-auto">
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('js')
+    <script>
+        function openModal(src) {
+            const image = document.getElementById('letterPreview');
+            image.src = src;
+            document.getElementById('letterModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('letterModal').classList.add('hidden');
+        }
+    </script>
+@endpush
 @endsection

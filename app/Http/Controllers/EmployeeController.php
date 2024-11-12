@@ -50,7 +50,7 @@ class EmployeeController extends Controller
                 'date_of_birth' => 'required|date',
                 'phone_number' => 'required|string|max:15|unique:employee,phone_number',
                 'address' => 'required|string|max:100',
-                // 'profile' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'profile' => 'required|image|mimes:jpg,png,jpeg|max:2048',
                 'username' => 'required|string|max:50|unique:user,username',
                 'password' => 'required|string|min:8',
                 'password_confirm' => 'required|string|min:8|same:password',
@@ -78,10 +78,10 @@ class EmployeeController extends Controller
                 'address.string' => 'The address must be a string.',
                 'address.max' => 'The address may not be greater than 100 characters.',
 
-                // 'profile.required' => 'The profile image field is required.',
-                // 'profile.image' => 'The profile must be an image.',
-                // 'profile.mimes' => 'The profile must be a file of type: jpg, png, jpeg.',
-                // 'profile.max' => 'The profile may not be greater than 2MB.',
+                'profile.required' => 'The profile image field is required.',
+                'profile.image' => 'The profile must be an image.',
+                'profile.mimes' => 'The profile must be a file of type: jpg, png, jpeg.',
+                'profile.max' => 'The profile may not be greater than 2MB.',
 
                 'username.required' => 'The username field is required.',
                 'username.string' => 'The username must be a string.',
@@ -101,13 +101,20 @@ class EmployeeController extends Controller
             ]
         );
 
+        if ($request->hasFile('profile')) {
+            $image = $request->file('profile');
+            $result = CloudinaryController::upload($image->getRealPath(), 'worktrack/profile', 300, 300);
+        } else {
+            return back()->withErrors(['profile' => 'Failed to upload image.']);
+        }
+
         $employee = EmployeeModel::create([
             'employee_number' => $request->employee_number,
             'name' => $request->name,
             'date_of_birth' => $request->date_of_birth,
             'phone_number' => $request->phone_number,
             'address' => $request->address,
-            'profile' => $request->profile,
+            'profile' => $result,
         ]);
 
         User::create([
@@ -161,11 +168,11 @@ class EmployeeController extends Controller
                 'date_of_birth' => 'required|date',
                 'phone_number' => 'required|string|max:15|unique:employee,phone_number,' . $id . ',employee_id',
                 'address' => 'required|string|max:100',
-                // 'profile' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'profile' => 'sometimes|image|mimes:jpg,png,jpeg|max:2048',
                 'username' => 'required|string|max:50|unique:user,username,' . $id . ',user_id',
                 'password' => 'nullable|string|min:8',
                 'password_confirm' => 'nullable|string|min:8|same:password',
-                'role_id' => 'required|integer',
+                'role_id' => 'required',
             ],
             [
                 'employee_number.required' => 'The employee number field is required.',
@@ -189,10 +196,9 @@ class EmployeeController extends Controller
                 'address.string' => 'The address must be a string.',
                 'address.max' => 'The address may not be greater than 100 characters.',
 
-                // 'profile.required' => 'The profile image field is required.',
-                // 'profile.image' => 'The profile must be an image.',
-                // 'profile.mimes' => 'The profile must be a file of type: jpg, png, jpeg.',
-                // 'profile.max' => 'The profile may not be greater than 2MB.',
+                'profile.image' => 'The profile must be an image.',
+                'profile.mimes' => 'The profile must be a file of type: jpg, png, jpeg.',
+                'profile.max' => 'The profile may not be greater than 2MB.',
 
                 'username.required' => 'The username field is required.',
                 'username.string' => 'The username must be a string.',
@@ -210,13 +216,22 @@ class EmployeeController extends Controller
             ]
         );
 
-        $employee = EmployeeModel::find($id)->update([
+        $employee = EmployeeModel::find($id);
+
+        if ($request->hasFile('profile')) {
+            $image = $request->file('profile');
+            $result = CloudinaryController::replace($employee->profile, $image->getRealPath(), 'worktrack/profile', 300, 300);
+        } else {
+            $result = $employee->profile;
+        }
+
+        $employee->update([
             'employee_number' => $request->employee_number,
             'name' => $request->name,
             'date_of_birth' => $request->date_of_birth,
             'phone_number' => $request->phone_number,
             'address' => $request->address,
-            'profile' => $request->profile,
+            'profile' => $result,
         ]);
 
         User::where('employee_id', $id)->update([
@@ -242,6 +257,9 @@ class EmployeeController extends Controller
                 $user->delete();
             }
 
+            if ($employee->profile) {
+                CloudinaryController::delete($employee->profile, 'worktrack/profile');
+            }
             $employee->delete();
 
             return redirect('employee')->with('success', 'Employee data successfully deleted');

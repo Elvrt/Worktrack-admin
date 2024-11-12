@@ -46,6 +46,10 @@ class TimeOffController extends Controller
         }
 
         try {
+            if ($check->letter) {
+                CloudinaryController::delete($check->letter, 'worktrack/letter');
+            }
+
             TimeOffModel::destroy($id);
 
             return redirect('time-off')->with('success', 'Time Off data successfully deleted');
