@@ -1,16 +1,23 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\reportmodel;
+use App\Models\ReportModel;
 use Illuminate\Http\Request;
 
 class ReportMonthlyController extends Controller
 {
- // Display a listing of the reports
  public function index()
  {
-     $reports = reportmodel::all();
-     return view('report.index', compact('report'));
+    $breadcrumb = (object) [
+        'title' => 'Report List',
+        'list' => ['Home', 'Report', 'List']
+    ];
+
+    $activeMenu = 'report';
+
+    $reports = ReportModel::all();
+    
+    return view('report.index', compact('breadcrumb', 'reports', 'activeMenu'));
  }
 
  // Show the form for creating a new report

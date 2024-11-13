@@ -8,6 +8,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\TimeOffController;
+use App\Http\Controllers\ReportMonthlyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -97,6 +98,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', [TimeOffController::class, 'index'])->name('time-off.index');
         Route::get('/{id}', [TimeOffController::class, 'show'])->name('time-off.show');
         Route::delete('/{id}', [TimeOffController::class, 'destroy'])->name('time-off.destroy');
+    });
+
+    Route::group(['prefix' => 'report'], function () {
+        Route::get('/', [ReportMonthlyController::class, 'index'])->name('report.index');
     });
 });
 
