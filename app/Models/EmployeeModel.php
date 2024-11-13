@@ -20,7 +20,7 @@ class EmployeeModel extends Model
         'date_of_birth',
         'phone_number',
         'address',
-        'profil',
+        'profile',
     ];
 
     public function user()

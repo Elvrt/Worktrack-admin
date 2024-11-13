@@ -95,7 +95,7 @@
                                 @error('role_id')
                                     <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                 @enderror
-                            </div>                 
+                            </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="username"
                                     class="block mb-2 text-sm font-medium text-gray-900">Username</label>
@@ -109,8 +109,7 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="password"
                                     class="block mb-2 text-sm font-medium text-gray-900">Password</label>
-                                <input type="password" name="password" id="password"
-                                    value="{{ old('password') }}"
+                                <input type="password" name="password" id="password" value="{{ old('password') }}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                                     placeholder="Enter password" required>
                                 @error('password')
@@ -133,11 +132,18 @@
                                     class="block mb-2 text-sm font-medium text-gray-900">Profile</label>
                                 <input
                                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-                                    name="profile" id="profile" value="{{ old('profile') }}" type="file"
-                                    placeholder="Enter profile">
+                                    name="profile" id="profile" type="file" accept="image/*"
+                                    onchange="previewImage(event)">
+                                <p class="mt-1 text-sm text-gray-500">JPG, PNG, or JPEG (MAX. 2MB).</p>
                                 @error('profile')
                                     <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                 @enderror
+
+                                <!-- Display cropped image preview here -->
+                                <div class="mt-3">
+                                    <img id="profilePreview" src="#" alt=""
+                                        class="w-32 h-32 rounded-full object-cover bg-red-100 hidden">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -153,4 +159,21 @@
         </div>
     </div>
 </div>
+
+@push('js')
+    <script>
+        function previewImage(event) {
+            const image = document.getElementById('profilePreview');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    image.src = e.target.result;
+                    image.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+@endpush
 @endsection

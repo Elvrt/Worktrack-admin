@@ -43,7 +43,7 @@ class PermissionController extends Controller
                 'start_date' => 'required|date',
                 'end_date' => 'required|date|after_or_equal:start_date',
                 'reason' => 'required|string|max:200',
-                // 'letter' => 'required|file|mimes:pdf|max:2048',
+                'letter' => 'required|file|mimes:jpg,png,jpeg|max:2048',
                 'employee_id' => 'required',
             ],
             [
@@ -58,20 +58,27 @@ class PermissionController extends Controller
                 'reason.string' => 'The reason must be a valid string.',
                 'reason.max' => 'The reason must not exceed 200 characters.',
 
-                // 'letter.required' => 'The letter field is required.',
-                // 'letter.file' => 'The letter must be a file.',
-                // 'letter.mimes' => 'The letter must be a file of type: pdf.',
-                // 'letter.max' => 'The letter file may not be larger than 2MB.',
+                'letter.required' => 'The letter field is required.',
+                'letter.file' => 'The letter must be a file.',
+                'letter.mimes' => 'The letter must be a file of type: jpg, png, jpeg.',
+                'letter.max' => 'The letter file may not be larger than 2MB.',
 
                 'employee_id.required' => 'The employee name field is required.',
             ]
         );
 
+        if ($request->hasFile('letter')) {
+            $image = $request->file('letter');
+            $result = CloudinaryController::upload($image->getRealPath(), 'worktrack/letter');
+        } else {
+            return back()->withErrors(['letter' => 'Failed to upload pdf.']);
+        }
+
         TimeOffModel::create([
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'reason' => $request->reason,
-            'letter' => $request->letter,
+            'letter' => $result,
             'status' => 'pending',
             'employee_id'=> $request->employee_id,
         ]);
