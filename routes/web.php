@@ -88,3 +88,4 @@ Route::group(['prefix' => 'time-off'], function () {
     Route::get('/{id}', [TimeOffController::class, 'show'])->name('time-off.show');
     Route::delete('/{id}', [TimeOffController::class, 'destroy'])->name('time-off.destroy');
 });
+
