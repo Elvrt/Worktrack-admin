@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class reportmodel extends Model
+class ReportModel extends Model
 {
     use HasFactory;
 
@@ -17,8 +17,6 @@ class reportmodel extends Model
         'absence_id',
         'activity_title',
         'activity_description',
-        'activity_photo',
-        'comment'
     ];
 
     public function absence()

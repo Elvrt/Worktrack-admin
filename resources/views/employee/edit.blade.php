@@ -37,7 +37,7 @@
                                     <input type="text" name="employee_number" id="employee_number"
                                         value="{{ old('employee_number', $employee->employee_number) }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                        placeholder="Enter employee number" required>
+                                        placeholder="Enter employee number" autocomplete="off" required>
                                     @error('employee_number')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                     @enderror
@@ -46,7 +46,7 @@
                                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
                                     <input type="text" name="name" id="name" value="{{ old('name', $employee->name) }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                        placeholder="Enter name" required>
+                                        placeholder="Enter name" autocomplete="off" required>
                                     @error('name')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                     @enderror
@@ -67,7 +67,7 @@
                                             id="datepicker-orientation" datepicker datepicker-orientation="bottom right"
                                             type="text"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                            placeholder="Select date" required>
+                                            placeholder="Select date" autocomplete="off" required>
                                     </div>
                                     @error('date_of_birth')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
@@ -79,7 +79,7 @@
                                     <input type="text" name="phone_number" id="phone_number"
                                         value="{{ old('phone_number', $employee->phone_number) }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                        placeholder="Enter phone number" required>
+                                        placeholder="Enter phone number" autocomplete="off" required>
                                     @error('phone_number')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                     @enderror
@@ -117,7 +117,7 @@
                                     <input type="text" name="username" id="username"
                                         value="{{ old('username', $employee->user->username) }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                        placeholder="Enter username" required>
+                                        placeholder="Enter username" autocomplete="off" required>
                                     @error('username')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                     @enderror
@@ -127,7 +127,7 @@
                                         class="block mb-2 text-sm font-medium text-gray-900">Password</label>
                                     <input type="password" name="password" id="password" value="{{ old('password') }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                        placeholder="Enter password">
+                                        placeholder="Enter password" autocomplete="off">
                                     @error('password')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                     @enderror
@@ -138,7 +138,7 @@
                                     <input type="password" name="password_confirm" id="password_confirm"
                                         value="{{ old('password_confirm') }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                        placeholder="Enter password confirm">
+                                        placeholder="Enter password confirm" autocomplete="off">
                                     @error('password_confirm')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                     @enderror

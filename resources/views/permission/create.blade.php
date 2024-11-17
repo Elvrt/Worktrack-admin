@@ -62,7 +62,7 @@
                                         id="datepicker-orientation" datepicker datepicker-orientation="bottom right"
                                         type="text"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                        placeholder="Select start date" required>
+                                        placeholder="Select start date" autocomplete="off" required>
                                 </div>
                                 @error('start_date')
                                     <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
@@ -83,7 +83,7 @@
                                         id="datepicker-orientation" datepicker datepicker-orientation="bottom right"
                                         type="text"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                        placeholder="Select end date" required>
+                                        placeholder="Select end date" autocomplete="off" required>
                                 </div>
                                 @error('end_date')
                                     <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>

@@ -8,6 +8,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\TimeOffController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportMonthlyController;
 use Illuminate\Support\Facades\Route;
 
@@ -101,7 +102,13 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['prefix' => 'report'], function () {
-        Route::get('/', [ReportMonthlyController::class, 'index'])->name('report.index');
+        Route::get('/', [ReportController::class, 'index'])->name('report.index');
+        Route::get('/create', [ReportController::class, 'create'])->name('report.create');
+        Route::post('/', [ReportController::class, 'store'])->name('report.store');
+        Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
+        Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('report.edit');
+        Route::put('/{id}', [ReportController::class, 'update'])->name('report.update');
+        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
     });
 });
 

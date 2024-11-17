@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Auth;
-use Illuminate\Http\Request;
 use App\Models\User;
-use Validator;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class APIAuthController extends Controller
 {
@@ -27,14 +26,14 @@ class APIAuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'user' => $user,
-        ]);
+        ], 200);
     }
 
     public function logout()
     {
         Auth::user()->tokens()->delete();
         return response()->json([
-            'message' => 'logout success'
+            'message' => 'Logout success'
         ]);
     }
 }

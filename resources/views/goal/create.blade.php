@@ -34,7 +34,7 @@
                                         id="datepicker-orientation" datepicker datepicker-orientation="bottom right"
                                         type="text"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                        placeholder="Select date" required>
+                                        placeholder="Select date" autocomplete="off" required>
                                 </div>
                                 @error('goal_date')
                                     <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
@@ -46,7 +46,7 @@
                                 <input type="text" name="project_title" id="project_title"
                                     value="{{ old('project_title') }}"
                                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                    placeholder="Enter project title" required>
+                                    placeholder="Enter project title" autocomplete="off" required>
                                 @error('project_title')
                                     <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                 @enderror
@@ -66,6 +66,9 @@
                                     Names</label>
                                 <!-- Selected Employees Display -->
                                 <div id="selectedEmployees" class="mt-2 mb-2"></div>
+                                @error('employee_id')
+                                    <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
+                                @enderror
                                 <button type="button" onclick="openEmployeeModal()"
                                     class="bg-yellow-500 text-white rounded-lg px-4 py-2 hover:bg-yellow-600">
                                     Select Employees

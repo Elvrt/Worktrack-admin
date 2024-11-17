@@ -35,7 +35,7 @@
                                         class="block mb-2 text-sm font-medium text-gray-900">Position</label>
                                     <input type="text" name="position" id="position" value="{{ old('position', $role->position) }}"
                                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                                        placeholder="Eselon" required>
+                                        placeholder="Eselon" autocomplete="off" required>
                                     @error('position')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
                                     @enderror

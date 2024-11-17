@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\reportmodel;
 use Illuminate\Http\Request;
 
-class APIreportcontroller extends Controller
+class APIReportController extends Controller
 {
     public function getReports($month)
     {

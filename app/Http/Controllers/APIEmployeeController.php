@@ -3,149 +3,80 @@
 namespace App\Http\Controllers;
 
 use App\Models\EmployeeModel;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class APIEmployeeController extends Controller
 {
-    public function index()
+    public function show()
     {
-        $employees = EmployeeModel::all();
-
-        return response()->json([
-            'message' => 'Employee list retrieved successfully',
-            'data' => $employees,
-        ]);
-    }
-
-    public function show($id)
-    {
-        $employee = EmployeeModel::find($id);
+        $user = Auth::user();
+        $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
 
         if (!$employee) {
             return response()->json([
-                'message' => 'Employee not found',
+                'status' => 'error',
+                'message' => 'Employee data not found',
             ], 404);
         }
 
+        $user->employee = $employee;
+
         return response()->json([
-            'message' => 'Employee details retrieved successfully',
-            'data' => $employee,
-        ]);
+            'status' => 'success',
+            'message' => 'Employee data found successfully',
+            'data' => $user,
+        ], 200);
     }
 
-    public function store(Request $request)
+    public function update(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'employee_number' => 'required|string|max:20|unique:employee,employee_number',
-            'name' => 'required|string|max:100',
-            'date_of_birth' => 'required|date',
-            'phone_number' => 'required|string|max:15|unique:employee,phone_number',
-            'address' => 'required|string|max:100',
-            'username' => 'required|string|max:50|unique:user,username',
-            'password' => 'required|string|min:8',
-            'role_id' => 'required|exists:roles,id',
-        ]);
+        $user = Auth::user();
+        $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
 
-        if ($validator->fails()) {
+        if (!$employee) {
             return response()->json([
-                'message' => 'Validation errors',
-                'errors' => $validator->errors(),
-            ], 422);
+                'status' => 'error',
+                'message' => 'Employee data not found',
+            ], 404);
         }
 
-        $employee = EmployeeModel::create($request->only([
-            'employee_number',
-            'name',
-            'date_of_birth',
-            'phone_number',
-            'address',
-        ]));
+        $request->validate(
+            [
+                'name' => 'required|string|max:100',
+                'date_of_birth' => 'required|date',
+                'phone_number' => 'required|string|max:15|unique:employee,phone_number,' . $employee->employee_id . ',employee_id',
+                'address' => 'required|string|max:100',
+                'profile' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+                'username' => 'required|string|max:50|unique:user,username,' . $user->user_id . ',user_id',
+            ]
+        );
 
-        User::create([
+        if ($request->hasFile('profile')) {
+            $image = $request->file('profile');
+            $result = CloudinaryController::replace($employee->profile, $image->getRealPath(), 'worktrack/profile', 300, 300);
+        } else {
+            $result = $employee->profile;
+        }
+
+        $employee->update([
+            'name' => $request->name,
+            'date_of_birth' => $request->date_of_birth,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            'profile' => $result,
+        ]);
+
+        $user->update([
             'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'role_id' => $request->role_id,
-            'employee_id' => $employee->id,
         ]);
+
+        $user->employee = $employee;
 
         return response()->json([
-            'message' => 'Employee created successfully',
-            'data' => $employee,
-        ], 201);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $employee = EmployeeModel::find($id);
-
-        if (!$employee) {
-            return response()->json([
-                'message' => 'Employee not found',
-            ], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'employee_number' => 'sometimes|string|max:20|unique:employee,employee_number,' . $id,
-            'name' => 'sometimes|string|max:100',
-            'date_of_birth' => 'sometimes|date',
-            'phone_number' => 'sometimes|string|max:15|unique:employee,phone_number,' . $id,
-            'address' => 'sometimes|string|max:100',
-            'username' => 'sometimes|string|max:50|unique:user,username,' . $employee->user->id,
-            'password' => 'nullable|string|min:8',
-            'role_id' => 'sometimes|exists:roles,id',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation errors',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        $employee->update($request->only([
-            'employee_number',
-            'name',
-            'date_of_birth',
-            'phone_number',
-            'address',
-        ]));
-
-        $employee->user->update([
-            'username' => $request->username ?? $employee->user->username,
-            'role_id' => $request->role_id ?? $employee->user->role_id,
-            'password' => $request->password ? Hash::make($request->password) : $employee->user->password,
-        ]);
-
-        return response()->json([
-            'message' => 'Employee updated successfully',
-            'data' => $employee,
-        ]);
-    }
-
-    public function destroy($id)
-    {
-        $employee = EmployeeModel::find($id);
-
-        if (!$employee) {
-            return response()->json([
-                'message' => 'Employee not found',
-            ], 404);
-        }
-
-        try {
-            $employee->user->delete();
-            $employee->delete();
-
-            return response()->json([
-                'message' => 'Employee deleted successfully',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to delete employee',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+            'status' => 'success',
+            'message' => 'Employee data successfully updated',
+            'data' => $user,
+        ], 200);
     }
 }
