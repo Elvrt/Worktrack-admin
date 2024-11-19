@@ -22,7 +22,7 @@ class APIEmployeeController extends Controller
             ], 404);
         }
 
-        $responseData = [
+        $data = [
             'employee' => [
                 'employee_number' => $employee->employee_number,
                 'name' => $employee->name,
@@ -40,7 +40,7 @@ class APIEmployeeController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Employee data found successfully',
-            'data' =>  $responseData,
+            'data' =>  $data,
         ], 200);
     }
 

@@ -3,27 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\TimeOffModel;
+use App\Models\EmployeeModel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class APITimeOffController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index()
     {
-        // Ambil parameter limit dari request, default ke 5 jika tidak disediakan
-        $limit = $request->input('limit', 5);
+        $user = Auth::user();
+        $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
+
+        if (!$employee) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Employee data not found',
+            ], 404);
+        }
+
+        $timeoff = TimeOffModel::where('employee_id', $employee->employee_id)->get();
         
-        // Ambil parameter sort_by dan sort_order dari request
-        $sortBy = $request->input('sort_by', 'time_off_id'); // Kolom yang digunakan untuk sorting, default 'created_at'
-        $sortOrder = $request->input('sort_order', 'asc'); // Urutan sorting, default 'desc'
-        
-        // Ambil data dengan pagination dan sorting
-        $data = TimeOffModel::orderBy($sortBy, $sortOrder)->paginate($limit);
-        
-        // Return hasil pagination
-        return response()->json($data);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Time Off data found successfully',
+            'data' =>  $timeoff,
+        ], 200);
     }
     
     
