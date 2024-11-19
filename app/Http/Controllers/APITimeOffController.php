@@ -21,7 +21,9 @@ class APITimeOffController extends Controller
             ], 404);
         }
 
-        $timeoff = TimeOffModel::where('employee_id', $employee->employee_id)->get();
+        $timeoff = TimeOffModel::where('employee_id', $employee->employee_id)
+                ->with('employee') // Include employee data
+                ->get();
         
         return response()->json([
             'status' => 'success',
