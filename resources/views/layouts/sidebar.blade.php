@@ -81,7 +81,7 @@
                             </li>
                             <li>
                                 <a href="{{ route('time-off.index') }}"
-                                    class="{{ ($activeMenu == 'time-off') ? 'bg-yellow-200 text-yellow-900' : 'text-gray-900' }}text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-yellow-100 active:bg-yellow-300 transition duration-75 pl-11">Time
+                                    class="{{ ($activeMenu == 'time-off') ? 'bg-yellow-200 text-yellow-900' : 'text-gray-900' }} text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-yellow-100 active:bg-yellow-300 transition duration-75 pl-11">Time
                                     Off</a>
                             </li>
                             <li>
@@ -89,8 +89,8 @@
                                     class="text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-yellow-100 active:bg-yellow-300 transition duration-75 pl-11">Absences</a>
                             </li>
                             <li>
-                                <a href="#"
-                                    class="text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-yellow-100 active:bg-yellow-300 transition duration-75 pl-11">Reports</a>
+                                <a href="{{ route('report.index') }}"
+                                    class="{{ ($activeMenu == 'report') ? 'bg-yellow-200 text-yellow-900' : 'text-gray-900' }} text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-yellow-100 active:bg-yellow-300 transition duration-75 pl-11">Reports</a>
                             </li>
                         </ul>
                     </li>

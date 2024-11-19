@@ -45,7 +45,7 @@
                                             id="datepicker-orientation" datepicker datepicker-orientation="bottom right"
                                             type="text"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                            placeholder="Select date" required>
+                                            placeholder="Select date" autocomplete="off" required>
                                     </div>
                                     @error('event_date')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>
@@ -66,7 +66,7 @@
                                         </div>
                                         <input name="event_time" id="event_time" value="{{ old('event_time', $event->event_time) }}" type="time"
                                             class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                            required />
+                                            autocomplete="off" required />
                                     </div>
                                     @error('event_time')
                                         <div class="text-red-500 mt-1 text-sm">{{ $message }}</div>

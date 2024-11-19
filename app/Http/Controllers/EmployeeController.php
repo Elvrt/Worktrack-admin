@@ -239,6 +239,7 @@ class EmployeeController extends Controller
             'role_id' => $request->role_id,
             'password' => $request->password ? bcrypt($request->password) : User::find($id)->password,
         ]);
+        
         return redirect('employee')->with('success', 'Employee data successfully changed');
     }
 
