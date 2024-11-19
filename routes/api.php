@@ -6,6 +6,7 @@ use App\Http\Controllers\APIAuthController;
 use App\Http\Controllers\APIEmployeeController;
 
 use App\Http\Controllers\APIAbsenceController;
+use App\Http\Controllers\APIreportcontroller;
 use App\Http\Controllers\APITimeOffController;
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,7 @@ Route::group(['prefix' => 'timeoff'], function () {
     Route::delete('/delete/{id}', [APITimeOffController::class, 'destroy']);
 });
 
+Route ::get('showreport', [APIreportcontroller::class, 'index']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
