@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RoleModel;
 use App\Models\EmployeeModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ class APIEmployeeController extends Controller
     {
         $user = Auth::user();
         $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
+        $role = RoleModel::where('role_id', $user->role_id)->first();
 
         if (!$employee) {
             return response()->json([
@@ -20,12 +22,25 @@ class APIEmployeeController extends Controller
             ], 404);
         }
 
-        $user->employee = $employee;
+        $responseData = [
+            'employee' => [
+                'employee_number' => $employee->employee_number,
+                'name' => $employee->name,
+                'date_of_birth' => $employee->date_of_birth,
+                'phone_number' => $employee->phone_number,
+                'address' => $employee->address,
+                'profile' => $employee->profile,
+            ],
+            'role' => [
+                'position' => $role ? $role->position : null, // Jika role ditemukan, sertakan posisi
+            ],
+            'username' => $user->username,
+        ];
 
         return response()->json([
             'status' => 'success',
             'message' => 'Employee data found successfully',
-            'data' => $user,
+            'data' =>  $responseData,
         ], 200);
     }
 
