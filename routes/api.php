@@ -6,7 +6,7 @@ use App\Http\Controllers\APIAuthController;
 use App\Http\Controllers\APIEmployeeController;
 
 use App\Http\Controllers\APIAbsenceController;
-use App\Http\Controllers\APIreportcontroller;
+use App\Http\Controllers\APIReportController;
 use App\Http\Controllers\APITimeOffController;
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update', [APIEmployeeController::class, 'update']);
     });
 
-
     Route::group(['prefix' => 'timeoff'], function () {
         Route::get('/', [APITimeOffController::class, 'index']);
         Route::post('/store', [APITimeOffController::class, 'store']);
@@ -43,9 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete/{id}', [APITimeOffController::class, 'destroy']);
     });
 
-    Route ::get('showreport', [APIreportcontroller::class, 'index']);
+    Route ::get('showreport', [APIReportController::class, 'index']);
 });
-
 
 Route::middleware('auth:sanctum')->group(function () {
     // Get all absences
