@@ -9,7 +9,6 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\TimeOffController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ReportMonthlyController;
 use Illuminate\Support\Facades\Route;
 
 /*
