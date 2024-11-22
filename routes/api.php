@@ -28,8 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [APIAuthController::class, 'logout']);
 
     Route::group(['prefix' => 'employee'], function () {
-        Route::get('/', [APIEmployeeController::class, 'show']);
-        Route::put('/', [APIEmployeeController::class, 'update']);
+        Route::get('/show', [APIEmployeeController::class, 'show']);
+        Route::post('/update', [APIEmployeeController::class, 'update']);
     });
 
     Route::group(['prefix' => 'timeoff'], function () {

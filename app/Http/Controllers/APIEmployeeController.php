@@ -32,9 +32,11 @@ class APIEmployeeController extends Controller
                 'profile' => $employee->profile,
             ],
             'role' => [
-                'position' => $role ? $role->position : null, // Jika role ditemukan, sertakan posisi
+                'position' => $role->position,
             ],
-            'username' => $user->username,
+            'user' => [
+                'username' => $user->username,
+            ],
         ];
 
         return response()->json([
@@ -48,6 +50,7 @@ class APIEmployeeController extends Controller
     {
         $user = Auth::user();
         $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
+        $role = RoleModel::where('role_id', $user->role_id)->first();
 
         if (!$employee) {
             return response()->json([
@@ -86,12 +89,27 @@ class APIEmployeeController extends Controller
             'username' => $request->username,
         ]);
 
-        $user->employee = $employee;
+        $data = [
+            'employee' => [
+                'employee_number' => $employee->employee_number,
+                'name' => $employee->name,
+                'date_of_birth' => $employee->date_of_birth,
+                'phone_number' => $employee->phone_number,
+                'address' => $employee->address,
+                'profile' => $employee->profile,
+            ],
+            'role' => [
+                'position' => $role->position,
+            ],
+            'user' => [
+                'username' => $user->username,
+            ],
+        ];
 
         return response()->json([
             'status' => 'success',
             'message' => 'Employee data successfully updated',
-            'data' => $user,
+            'data' => $data,
         ], 200);
     }
 }
