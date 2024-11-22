@@ -33,15 +33,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update', [APIEmployeeController::class, 'update']);
     });
 
-Route::group(['prefix' => 'timeoff'], function () {
-    Route::get('/', [APITimeOffController::class, 'index']);
-    Route::post('/store', [APITimeOffController::class, 'store']);
-    Route::get('/show/{id}', [APITimeOffController::class, 'show']);
-    Route::post('/edit/{id}', [APITimeOffController::class, 'edit']);
-    Route::put('/update/{id}', [APITimeOffController::class, 'update']);
-    Route::delete('/delete/{id}', [APITimeOffController::class, 'destroy']);
-});
 
+    Route::group(['prefix' => 'timeoff'], function () {
+        Route::get('/', [APITimeOffController::class, 'index']);
+        Route::post('/store', [APITimeOffController::class, 'store']);
+        Route::get('/show/{id}', [APITimeOffController::class, 'show']);
+        Route::post('/edit/{id}', [APITimeOffController::class, 'edit']);
+        Route::put('/update/{id}', [APITimeOffController::class, 'update']);
+        Route::delete('/delete/{id}', [APITimeOffController::class, 'destroy']);
+    });
+
+    Route ::get('showreport', [APIreportcontroller::class, 'index']);
+});
 
 
 Route::middleware('auth:sanctum')->group(function () {
