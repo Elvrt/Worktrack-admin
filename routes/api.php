@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\APIAuthController;
-use App\Http\Controllers\APIEmployeeController;
-
+use App\Http\Controllers\APIHomeController;
 use App\Http\Controllers\APIAbsenceController;
+use App\Http\Controllers\APIEmployeeController;
 use App\Http\Controllers\APIReportController;
 use App\Http\Controllers\APITimeOffController;
 /*
@@ -28,6 +28,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [APIAuthController::class, 'logout']);
 
+    Route::group(['prefix' => 'home'], function () {
+        Route::get('/', [APIHomeController::class, 'index']);
+    });
+
+    Route::group(['prefix' => 'absence'], function () {
+        Route::get('/clockin', [APIAbsenceController::class, 'clockIn']);
+        Route::get('/clockout', [APIAbsenceController::class, 'clockOut']);
+    });
+
     Route::group(['prefix' => 'employee'], function () {
         Route::get('/show', [APIEmployeeController::class, 'show']);
         Route::post('/update', [APIEmployeeController::class, 'update']);
@@ -47,21 +56,3 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/show/{id}', [APIReportController::class, 'show']);
     });
 });
-Route::middleware('auth:sanctum')->group(function () {
-    // Get all absences
-    Route::get('/', [APIAbsenceController::class, 'index']);
-
-    // Store a new absence
-    Route::post('/store', [APIAbsenceController::class, 'store']);
-
-    // Show a specific absence by ID
-    Route::get('/show/{id}', [APIAbsenceController::class, 'show']);
-
-    // Update a specific absence by ID
-    Route::put('/update/{id}', [APIAbsenceController::class, 'update']);
-
-    // Delete a specific absence by ID
-    Route::delete('/delete/{id}', [APIAbsenceController::class, 'destroy']);
-});
-
-// Route::post("create_data", [APITimeOffController::

@@ -2,64 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmployeeModel;
 use App\Models\AbsenceModel;
+use App\Models\GoalModel;
+use App\Models\AssignmentModel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class APIAbsenceController extends Controller
 {
-    /**
-     * Display a listing of the absences.
-     */
-    public function index()
+    public function clockIn(Request $request)
     {
-        // Get all absences
-        $absence = AbsenceModel::all();
+        $user = Auth::user();
+        $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
+        $goal = AssignmentModel::whereHas('goal', function ($query) use ($employee) {
+            $query->where('goal_date', '=', Carbon::now());
+        })
+            ->with('goal')
+            ->where('employee_id', $employee->employee_id)
+            ->get();
 
-        return response()->json($absence);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Employee data found successfully',
+            'goal' => $goal,
+        ], 200);
     }
 
-    /**
-     * Store a newly created absence record in storage.
-     */
-    public function store(Request $request)
-    {
-        // Validate incoming data
-        $validatedData = $request->validate([
-            'employee_id' => 'required|integer',
-            'absence_date' => 'required|date',
-            'clock_in' => 'nullable|date_format:H:i',
-            'clock_out' => 'nullable|date_format:H:i',
-            'location' => 'required|string',
-            'status' => 'required|string',
-            'created_at' => 'nullable|date',
-        ]);
-
-        // Create the absence record
-        $absence = AbsenceModel::create($validatedData);
-
-        // Return the created AbsenceModel record
-        return response()->json($absence, 201);
-    }
-
-    /**
-     * Display the specified absence record.
-     */
-    public function show(string $id)
-    {
-        // Find the absence by ID
-        $absence = AbsenceModel::find($id);
-
-        if (!$absence) {
-            return response()->json(['message' => 'Absence not found'], 404);
-        }
-
-        return response()->json($absence);
-    }
-
-    /**
-     * Update the specified absence record in storage.
-     */
-    public function update(Request $request, string $id)
+    public function clockOut(Request $request, string $id)
     {
         // Find the absence by ID
         $absence = AbsenceModel::find($id);
@@ -84,23 +55,5 @@ class APIAbsenceController extends Controller
 
         // Return the updated absence record
         return response()->json($absence);
-    }
-
-    /**
-     * Remove the specified absence record from storage.
-     */
-    public function destroy(string $id)
-    {
-        // Find the absence by ID
-        $absence = AbsenceModel::find($id);
-
-        if (!$absence) {
-            return response()->json(['message' => 'Absence not found'], 404);
-        }
-
-        // Delete the absence record
-        $absence->delete();
-
-        return response()->json(['message' => 'Absence deleted successfully']);
     }
 }
