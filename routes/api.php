@@ -42,9 +42,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete/{id}', [APITimeOffController::class, 'destroy']);
     });
 
-    Route ::get('showreport', [APIReportController::class, 'index']);
+    Route::group(['prefix' => 'report'], function () {
+        Route::get('/', [APIReportController::class, 'index']);
+        Route::get('/show/{id}', [APIReportController::class, 'show']);
+    });
 });
-
 Route::middleware('auth:sanctum')->group(function () {
     // Get all absences
     Route::get('/', [APIAbsenceController::class, 'index']);
