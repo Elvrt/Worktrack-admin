@@ -41,9 +41,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/update/{id}', [APITimeOffController::class, 'update']);
         Route::delete('/delete/{id}', [APITimeOffController::class, 'destroy']);
     });
-});
 
-Route ::get('showreport', [APIReportController::class, 'index']);
+    Route ::get('showreport', [APIReportController::class, 'index']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     // Get all absences
