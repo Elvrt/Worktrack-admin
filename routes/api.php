@@ -33,8 +33,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::group(['prefix' => 'absence'], function () {
-        Route::get('/clockin', [APIAbsenceController::class, 'clockIn']);
-        Route::get('/clockout', [APIAbsenceController::class, 'clockOut']);
+        Route::get('/goal', [APIAbsenceController::class, 'goal']);
+        Route::post('/clockin', [APIAbsenceController::class, 'clockIn']);
+        Route::post('/clockout', [APIAbsenceController::class, 'clockOut']);
     });
 
     Route::group(['prefix' => 'employee'], function () {
