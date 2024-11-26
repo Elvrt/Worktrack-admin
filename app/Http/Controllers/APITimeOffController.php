@@ -9,49 +9,78 @@ use Illuminate\Http\Request;
 
 class APITimeOffController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user();
-        $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
+    public function index(Request $request)
+{
+    $user = Auth::user();
+    $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
 
-        if (!$employee) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Employee data not found',
-            ], 404);
-        }
+    if (!$employee) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Employee data not found',
+        ], 404);
+    }
 
-        $data = TimeOffModel::where('employee_id', $employee->employee_id)
+    // Ambil limit dan page dari query parameter
+    $limit = $request->query('limit', 4); // Default 4 data per halaman
+    $page = $request->query('page', 1); // Default page 1
+
+    // Hitung offset berdasarkan halaman
+    $offset = ($page - 1) * $limit;
+
+    // Ambil total data
+    $totalData = TimeOffModel::where('employee_id', $employee->employee_id)->count();
+
+    // Ambil data dengan limit dan offset
+    $data = TimeOffModel::where('employee_id', $employee->employee_id)
                 ->with('employee') // Include employee data
+                ->skip($offset)
+                ->take($limit)
                 ->get();
-        
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Time Off data found successfully',
-            'data' => $data,
-        ], 200);
-    }
 
+    // Tentukan apakah ini halaman terakhir
+    $isLastPage = $page * $limit >= $totalData;
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Time Off data found successfully',
+        'data' => $data,
+        'current_page' => $page,
+        'total_data' => $totalData,
+        'is_last_page' => $isLastPage,
+    ], 200);
+}
+    
     public function store(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'employee_id' => 'required|integer',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'reason' => 'nullable|string',
-            'letter' => 'nullable|string',
-            'status' => 'required|string'
-        ]);
+{
+    $user = Auth::user();
 
-        // Menyimpan data
-        $timeOff = TimeOffModel::create($request->all());
+    $request->validate([
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'reason' => 'nullable|string',
+        'letter' => 'nullable|file|mimes:jpg,png,jpeg|max:2048', // Validasi file gambar
+    ]);
 
-        return response()->json([
-            'message' => 'Berhasil Menyimpan Data', 
-            'data' => $timeOff
-        ]);
+    $filePath = null;
+    if ($request->hasFile('letter')) {
+        $filePath = $request->file('letter')->store('letters', 'public');
     }
+
+    $timeOff = TimeOffModel::create([
+        'employee_id' => $user->employee_id, // Gunakan ID dari pengguna login
+        'start_date' => $request->start_date,
+        'end_date' => $request->end_date,
+        'reason' => $request->reason,
+        'letter' => $filePath,
+    ]);
+
+    return response()->json([
+        'message' => 'Time Off successfully submitted',
+        'data' => $timeOff,
+    ]);
+}
+
 
     public function show($id)
     {
