@@ -167,7 +167,7 @@ class ReportController extends Controller
         }
 
         try {
-            $report = ReportModel::where('report_id', $id)->first();
+            $report = ReportModel::where('absence_id', $absence->absence_id)->first();
 
             if ($report) {
                 $report->delete();
