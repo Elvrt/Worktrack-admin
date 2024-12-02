@@ -16,7 +16,7 @@ class APIHomeController extends Controller
         $user = Auth::user();
         $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
         $absence = AbsenceModel::where('employee_id', $employee->employee_id)
-            ->where('absence_date', '=', Carbon::now())
+            ->where('absence_date', '=', Carbon::today())
             ->first();
         $event = EventModel::whereDate('event_date', '>=', Carbon::today())
             ->limit(3)
