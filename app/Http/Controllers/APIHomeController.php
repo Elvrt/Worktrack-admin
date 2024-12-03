@@ -6,6 +6,8 @@ use App\Models\EmployeeModel;
 use App\Models\AbsenceModel;
 use App\Models\EventModel;
 use App\Models\TimeOffModel;
+use App\Models\AssignmentModel;
+use App\Models\GoalModel;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -17,6 +19,10 @@ class APIHomeController extends Controller
         $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
         $absence = AbsenceModel::where('employee_id', $employee->employee_id)
             ->where('absence_date', '=', Carbon::today())
+            ->first();
+        $assignment = AssignmentModel::where('employee_id', $employee->employee_id)
+            ->first();
+        $goal = GoalModel::where('goal_id', $assignment->goal_id)
             ->first();
         $event = EventModel::whereDate('event_date', '>=', Carbon::today())
             ->limit(3)
@@ -39,6 +45,7 @@ class APIHomeController extends Controller
             'message' => 'Employee data found successfully',
             'employee' => $employee,
             'absence' => $absence,
+            'goal' => $goal,
             'event' => $event,
             'timeoff' => $timeoff,
         ], 200);

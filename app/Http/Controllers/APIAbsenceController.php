@@ -37,7 +37,7 @@ class APIAbsenceController extends Controller
             'data' => $goal,
         ], 200);
     }
-    public function clockIn(Request $request)
+    public function clockIn()
     {
         $user = Auth::user();
         $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
@@ -48,11 +48,6 @@ class APIAbsenceController extends Controller
                 'message' => 'Employee data not found',
             ], 404);
         }
-
-        $request->validate([
-            'location' => 'nullable|string',
-            'coordinates' => 'nullable|string',
-        ]);
 
         $isOnLeave = TimeOffModel::where('employee_id', $employee->employee_id)
             ->whereDate('start_date', '<=', Carbon::today())
@@ -91,8 +86,8 @@ class APIAbsenceController extends Controller
             'absence_date' => Carbon::today(),
             'clock_in' => $clock_in,
             'clock_out' => null,
-            'location' => $request->location ? $request->location : null,
-            'coordinates' => $request->coordinates ? $request->coordinates : null,
+            'location' => null,
+            'coordinates' => null,
             'status' => $status,
             'employee_id' => $employee->employee_id,
         ]);
@@ -112,8 +107,6 @@ class APIAbsenceController extends Controller
                 'absence_date' => $absence->absence_date,
                 'clock_in' => $absence->clock_in,
                 'clock_out' => $absence->clock_out,
-                'location' => $request->location,
-                'coordinates' => $request->coordinates,
                 'status' => $absence->status,
             ],
         ];
