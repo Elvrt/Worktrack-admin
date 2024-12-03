@@ -51,7 +51,7 @@ class APITimeOffController extends Controller
     ], 200);
 }
     
-    public function store(Request $request)
+public function store(Request $request)
 {
     $user = Auth::user();
 
@@ -62,9 +62,18 @@ class APITimeOffController extends Controller
         'letter' => 'nullable|file|mimes:jpg,png,jpeg|max:2048', // Validasi file gambar
     ]);
 
+    // Proses upload file menggunakan CloudinaryController
     $filePath = null;
     if ($request->hasFile('letter')) {
-        $filePath = $request->file('letter')->store('letters', 'public');
+        $image = $request->file('letter');
+        $filePath = CloudinaryController::upload($image->getRealPath(), 'worktrack/letters', 800, 800);
+
+        if (!$filePath) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to upload letter file.',
+            ], 500);
+        }
     }
 
     $timeOff = TimeOffModel::create([
