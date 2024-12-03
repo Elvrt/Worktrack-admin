@@ -60,6 +60,7 @@ public function store(Request $request)
         'end_date' => 'required|date|after_or_equal:start_date',
         'reason' => 'nullable|string',
         'letter' => 'nullable|file|mimes:jpg,png,jpeg|max:2048', // Validasi file gambar
+        'status' => 'pending', 
     ]);
 
     // Proses upload file menggunakan CloudinaryController
@@ -82,6 +83,7 @@ public function store(Request $request)
         'end_date' => $request->end_date,
         'reason' => $request->reason,
         'letter' => $filePath,
+        'status' => 'pending', 
     ]);
 
     return response()->json([
