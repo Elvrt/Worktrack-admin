@@ -67,7 +67,7 @@ public function store(Request $request)
     $filePath = null;
     if ($request->hasFile('letter')) {
         $image = $request->file('letter');
-        $filePath = CloudinaryController::upload($image->getRealPath(), 'worktrack/letters', 800, 800);
+        $filePath = CloudinaryController::upload($image->getRealPath(), 'worktrack/letter', 800, 800);
 
         if (!$filePath) {
             return response()->json([
