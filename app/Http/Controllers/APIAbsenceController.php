@@ -86,8 +86,6 @@ class APIAbsenceController extends Controller
             'absence_date' => Carbon::today(),
             'clock_in' => $clock_in,
             'clock_out' => null,
-            'location' => null,
-            'coordinates' => null,
             'status' => $status,
             'employee_id' => $employee->employee_id,
         ]);

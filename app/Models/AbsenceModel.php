@@ -19,7 +19,6 @@ class AbsenceModel extends Model
         'absence_date',
         'clock_in',
         'clock_out',
-        'location',
         'status',
         'created_at',
     ];

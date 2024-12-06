@@ -17,10 +17,9 @@
                             clip-rule="evenodd"></path>
                     </svg>
                 </button>
-                <a href="https://flowbite-admin-dashboard.vercel.app/" class="flex ml-2 md:mr-24">
-                    <img src="https://flowbite-admin-dashboard.vercel.app/images/logo.svg" class="h-8 mr-3"
-                        alt="FlowBite Logo" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">WorkTrack</span>
+                <a href="" class="flex ml-2 md:mr-24">
+                    <img src="{{ asset('img/logo.png') }}" class="h-8 mr-3"
+                        alt="Worktrack Logo" />
                 </a>
             </div>
             <div class="flex items-center">

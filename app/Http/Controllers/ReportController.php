@@ -37,9 +37,6 @@ class ReportController extends Controller
         return view('report.create', compact('breadcrumb', 'employees', 'activeMenu'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate(
