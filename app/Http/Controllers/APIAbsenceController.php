@@ -75,9 +75,6 @@ class APIAbsenceController extends Controller
 
         $clock_in = Carbon::now()->format('H:i');
 
-        // Get the location (latitude, longitude) from the request
-        $latitude = $request->input('latitude');
-        $longitude = $request->input('longitude');
         $location = $request->input('address');
 
         if ($clock_in) {
@@ -93,8 +90,6 @@ class APIAbsenceController extends Controller
             'clock_out' => null,
             'status' => $status,
             'employee_id' => $employee->employee_id,
-            'latitude' => $latitude,  // Save the latitude
-            'longitude' => $longitude,  // Save the longitude
             'location' => $location,  // Save the address (optional)
         ]);
 
