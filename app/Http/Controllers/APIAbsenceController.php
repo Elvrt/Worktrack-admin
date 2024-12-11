@@ -78,7 +78,7 @@ class APIAbsenceController extends Controller
         // Get the location (latitude, longitude) from the request
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
-        $location = $request->input('address');  // Optional: You can also store the address
+        $location = $request->input('address');
 
         if ($clock_in) {
             $clockInTime = Carbon::createFromFormat('H:i', $clock_in);
@@ -98,10 +98,29 @@ class APIAbsenceController extends Controller
             'location' => $location,  // Save the address (optional)
         ]);
 
+        ReportModel::create([
+            'activity_title' => null,
+            'activity_description' => null,
+            'absence_id' => $absence->absence_id,
+        ]);
+
+        $data = [
+            'employee' => [
+                'employee_number' => $employee->employee_number,
+                'name' => $employee->name,
+            ],
+            'absence' => [
+                'absence_date' => $absence->absence_date,
+                'clock_in' => $absence->clock_in,
+                'clock_out' => $absence->clock_out,
+                'status' => $absence->status,
+            ],
+        ];
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Clock-in recorded successfully',
-            'data' => $absence,
+            'message' => 'Clock-in successfully recorded',
+            'data' => $data,
         ], 200);
     }
 
