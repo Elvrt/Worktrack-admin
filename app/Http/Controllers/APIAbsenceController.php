@@ -37,7 +37,7 @@ class APIAbsenceController extends Controller
             'data' => $goal,
         ], 200);
     }
-    public function clockIn()
+    public function clockIn(Request $request)
     {
         $user = Auth::user();
         $employee = EmployeeModel::where('employee_id', $user->employee_id)->first();
@@ -69,11 +69,16 @@ class APIAbsenceController extends Controller
         if ($absence) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Clock-in record not found for today',
+                'message' => 'Clock-in record already exists for today',
             ], 404);
         }
 
         $clock_in = Carbon::now()->format('H:i');
+
+        // Get the location (latitude, longitude) from the request
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+        $location = $request->input('address');  // Optional: You can also store the address
 
         if ($clock_in) {
             $clockInTime = Carbon::createFromFormat('H:i', $clock_in);
@@ -88,31 +93,15 @@ class APIAbsenceController extends Controller
             'clock_out' => null,
             'status' => $status,
             'employee_id' => $employee->employee_id,
+            'latitude' => $latitude,  // Save the latitude
+            'longitude' => $longitude,  // Save the longitude
+            'location' => $location,  // Save the address (optional)
         ]);
-
-        ReportModel::create([
-            'activity_title' => null,
-            'activity_description' => null,
-            'absence_id' => $absence->absence_id,
-        ]);
-
-        $data = [
-            'employee' => [
-                'employee_number' => $employee->employee_number,
-                'name' => $employee->name,
-            ],
-            'absence' => [
-                'absence_date' => $absence->absence_date,
-                'clock_in' => $absence->clock_in,
-                'clock_out' => $absence->clock_out,
-                'status' => $absence->status,
-            ],
-        ];
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Clock-in successfully recorded',
-            'data' => $data,
+            'message' => 'Clock-in recorded successfully',
+            'data' => $absence,
         ], 200);
     }
 

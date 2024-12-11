@@ -19,6 +19,7 @@ class AbsenceModel extends Model
         'absence_date',
         'clock_in',
         'clock_out',
+        'location',
         'status',
         'created_at',
     ];
@@ -32,4 +33,4 @@ class AbsenceModel extends Model
     {
         return $this->hasMany(ReportModel::class, 'report_id');
     }
-}   
+}
