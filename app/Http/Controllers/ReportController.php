@@ -101,7 +101,7 @@ class ReportController extends Controller
 
         $breadcrumb = (object) [
             'title' => 'Report Detail',
-            'list' => ['Home', 'Report', 'Detail','location']
+            'list' => ['Home', 'Report', 'Detail', 'Location']
         ];
 
         $activeMenu = 'report';
